@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class TodoBl {
@@ -25,14 +26,17 @@ public class TodoBl {
 
     public List<TodoEntity> getTodos() {
         LOGGER.info("BUSINESS-LOGIC: Iniciando consulta para obtener el listado de todo's");
-        List<TodoEntity> todoList = this.todoRepository.findAll();
+        List<TodoEntity> todoList = this.todoRepository.findAll()
+                .stream()
+                .filter(todo -> todo.getStatus() == 1)
+                .collect(Collectors.toList());
         LOGGER.info("BUSINESS-LOGIC: La consulta para obtener el listado de todo's retorno: {}", todoList);
         return todoList;
     }
     public TodoEntity getTodo(Integer id) {
         LOGGER.info("BUSINESS-LOGIC: Iniciando consulta para obtener un todo con id: {}", id);
         TodoEntity todo = this.todoRepository.findById(id).orElseThrow();
-        LOGGER.info("BUSINESS-LOGIC: La consulta para obtener un todo con id: {} retorno: {}", todo);
+        LOGGER.info("BUSINESS-LOGIC: La consulta para obtener un todo con id: {} retorno: {}",id, todo);
         return todo;
     }
 
@@ -54,6 +58,16 @@ public class TodoBl {
         todoEntity.setUpdatedAt(new Date());
         TodoEntity todo = this.todoRepository.save(todoEntity);
         LOGGER.info("BUSINESS-LOGIC: La consulta para actualizar un todo retorno: {}", todo);
+        return todo;
+    }
+
+    public TodoEntity deleteTodo(Integer id){
+        LOGGER.info("BUSINESS-LOGIC: Iniciando consulta para elimiar un todo's");
+        TodoEntity todoEntity = this.todoRepository.findById(id).orElseThrow();
+        todoEntity.setStatus(0);
+        todoEntity.setUpdatedAt(new Date());
+        TodoEntity todo = this.todoRepository.save(todoEntity);
+        LOGGER.info("BUSINESS-LOGIC: La consulta para elimiar un todo retorno: {}", todo);
         return todo;
     }
 

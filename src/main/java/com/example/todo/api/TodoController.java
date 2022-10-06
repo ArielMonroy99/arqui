@@ -3,6 +3,7 @@ package com.example.todo.api;
 import com.example.todo.bl.TodoBl;
 import com.example.todo.dao.TodoEntity;
 import com.example.todo.dto.TodoDto;
+import com.sun.xml.bind.v2.TODO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/v1/api/todo")
 public class TodoController {
@@ -52,5 +53,11 @@ public class TodoController {
         LOGGER.info("REQUEST: Iniciando petición para actualizar un TODO");
         TodoEntity result = todoBl.updateTodo(todoDto);
         return new ResponseEntity<>(result, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<TodoEntity> deleteTodo(@PathVariable Integer id) {
+        TodoEntity result = todoBl.deleteTodo(id);
+        return new ResponseEntity<>(result,HttpStatus.OK);
     }
 }

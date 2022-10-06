@@ -18,6 +18,7 @@ public class TodoEntity {
     @JsonFormat(pattern="HH:mm dd-MM-yyyy" , timezone="America/La_Paz")
     private Date createdAt;
     @Column
+    @JsonFormat(pattern="HH:mm dd-MM-yyyy" , timezone="America/La_Paz")
     private Date updatedAt;
     @Column
     private Integer status;
